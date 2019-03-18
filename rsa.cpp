@@ -39,7 +39,7 @@ class RSA
         return a;
     }
 
-    uint fastExp(int base, int exp, uint n)
+    uint Exp_n_Mod(int base, int exp, uint n)
     {
         while (base < 0)
             base += n;
@@ -47,7 +47,7 @@ class RSA
         {
             int temp = 0;
             extEuclid(base, n, &base, &temp);
-            return fastExp(base, -1 * exp, n);
+            return Exp_n_Mod(base, -1 * exp, n);
         }
         uint res = 1;
         base = base % n;
@@ -84,7 +84,7 @@ class RSA
         vector<uint> crypt_arr(msg.size());
         for (int i = 0; i < msg.size(); i++)
         {
-            uint temp = fastExp((uint)msg[i], pubKey, rem);
+            uint temp = Exp_n_Mod((uint)msg[i], pubKey, rem);
             crypt_arr.at(i) = temp;
         }
         return crypt_arr;
@@ -96,7 +96,7 @@ class RSA
         int len = crypt_arr.size();
         for (int i = 0; i < len; i++)
         {
-            dec_msg += (char)(fastExp(crypt_arr[i], privKey, rem));
+            dec_msg += (char)(Exp_n_Mod(crypt_arr[i], privKey, rem));
         }
         return dec_msg;
     }
